@@ -78,7 +78,7 @@ namespace AS_2D.FSM {
             }
         }
         /// <summary>
-        /// 用于初始化状态机的方法，添加所有状态，及其条件映射表，获取部分组件等。Awake时执行
+        /// 用于初始化状态机的方法，添加所有状态，及其条件映射表，获取部分组件等。Awake时执行，可不使用基类方法手动编码加载
         /// </summary>
         public virtual void InitStates() {
             //Debug.Log("initStates通过SO物体加载对应状态逻辑配置");

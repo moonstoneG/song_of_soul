@@ -44,7 +44,10 @@ namespace AS_2D.FSM
         /// <param name="fsm_StateID">赋值sateID</param>
         protected abstract void InitState();
        
-
+        /// <summary>
+        /// 为该状态添加条件列表类
+        /// </summary>
+        /// <param name="triggerID">要添加的条件的triggerID枚举，确保该枚举值和对应trgger类命对应正确</param>
 
         public void AddTriggers(FSM_TriggerID triggerID) {
             //Debug.Log(triggerID);
@@ -81,7 +84,7 @@ namespace AS_2D.FSM
                 Debug.LogError(_triggerID+"触发条件已存在，无法再次添加");
                 return;
             }
-            AddTriggers(_triggerID);
+            //AddTriggers(_triggerID);
             TriggerStateID_map.Add(_triggerID, ID);
         }
 
