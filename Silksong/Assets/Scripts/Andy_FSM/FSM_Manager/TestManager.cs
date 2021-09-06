@@ -7,6 +7,7 @@ public class TestManager : FSM_Manager
 {
     public override void InitStates()
     {
+        
         base.InitStates();
         //以下为手动编码添加的方法
         //Test1_State test1_State = new Test1_State();

@@ -125,9 +125,12 @@ namespace AS_2D.FSM
 
 
         /// <summary>
-        /// 进入状态时调用
+        /// 进入状态时调用，默认基类方法只赋值状态类中的fsmManger
         /// </summary>
-        public virtual void EnterState(FSM_Manager fSM_Manager) { }
+        public virtual void EnterState(FSM_Manager fSM_Manager) 
+        {
+            fsmManager = fSM_Manager;
+        }
         
         /// <summary>
         /// 退出状态时调用

@@ -71,6 +71,7 @@ namespace AS_2D.FSM
         /// </summary>
         PressDsahTwiceBtn,
         Test,
+        Test2,
     }
 }
 

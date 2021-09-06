@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Test2_StateConfig_SO
   m_EditorClassIdentifier: 
   stateID: 11
-  trigger_IDs: 07000000
+  trigger_IDs: 08000000
   map:
-  - triggerID: 7
+  - triggerID: 8
     stateID: 11

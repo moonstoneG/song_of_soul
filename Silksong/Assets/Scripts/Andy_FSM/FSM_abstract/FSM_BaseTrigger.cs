@@ -7,9 +7,8 @@ namespace AS_2D.FSM {
     {
         public FSM_TriggerID triggerID;
         /// <summary>
-        /// 构造赋值triggerTransitionID初始值
+        /// 构造调用InitTrigger方法赋值triggerID初始值
         /// </summary>
-        /// <param name="trigger_TransitionID"></param>
         public FSM_BaseTrigger()
         {
             InitTrigger();
