@@ -9,7 +9,6 @@ public class Enemy_Patrol_State : EnemyFSMBaseState
 
     public  float rayToGroundDistance;
 
-
     public override void Act_State(EnemyFSMManager fSM_Manager)
     {
         fsmManager = fSM_Manager;
@@ -26,7 +25,7 @@ public class Enemy_Patrol_State : EnemyFSMBaseState
         if (isBack)
         {
             Turn();
-            var rayHit = Physics2D.Raycast(fsmManager.transform.position + new Vector3((moveSpeed.x > 0 ? 1 : -1), 0, 0) * fsmManager.GetComponent<SpriteRenderer>().sprite.rect.width / 2, Vector2.down);
+            var rayHit= Physics2D.Raycast(fsmManager.transform.position + new Vector3((moveSpeed.x > 0 ? 1 : -1), 0, 0) * fsmManager.GetComponent<Collider2D>().bounds.size.x, Vector2.down);
             rayToGroundDistance = rayHit.distance;
         }
     }
@@ -39,9 +38,6 @@ public class Enemy_Patrol_State : EnemyFSMBaseState
         {
             EventsManager.Instance.AddListener(fsmManager.gameObject, EventType.onEnemyHitWall, HitWall);
         }
-
-       
-        
     }
     private void Turn()
     {
@@ -57,7 +53,6 @@ public class Enemy_Patrol_State : EnemyFSMBaseState
     }
     private void HitWall()
     {
-        
         Turn();
     }
     private void Move()
@@ -66,7 +61,7 @@ public class Enemy_Patrol_State : EnemyFSMBaseState
     }
     private void DetectionPlatformBoundary()
     {
-        var rayHit=Physics2D.Raycast(fsmManager.transform.position +new Vector3((moveSpeed.x>0?1:-1),0,0) * fsmManager.GetComponent<SpriteRenderer>().sprite.rect.width / 2, Vector2.down);
+        var rayHit=Physics2D.Raycast(fsmManager.transform.position +new Vector3((moveSpeed.x>0?1:-1),0,0) * fsmManager.GetComponent<Collider2D>().bounds.size.x, Vector2.down);
         if(rayHit.distance>rayToGroundDistance)
         {
             Turn();

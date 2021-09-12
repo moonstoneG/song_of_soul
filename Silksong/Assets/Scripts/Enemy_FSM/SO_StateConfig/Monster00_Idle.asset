@@ -20,7 +20,8 @@ MonoBehaviour:
   triggerID: 0
   triggerConfig:
     id: 1
-  triggerList: []
+  triggerList:
+  - id: 2
   references:
     version: 1
     00000000:
@@ -31,6 +32,13 @@ MonoBehaviour:
       type: {class: WaitTimeTrigger, ns: , asm: Assembly-CSharp}
       data:
         triggerID: 0
-        targetState: 0
-        maxTime: 0
+        targetState: 1
+        maxTime: 0.5
+        timer: 0
+    00000002:
+      type: {class: WaitTimeTrigger, ns: , asm: Assembly-CSharp}
+      data:
+        triggerID: 0
+        targetState: 1
+        maxTime: 0.5
         timer: 0
