@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class LittleMonster_FSMManager :EnemyFSMManager
 {
-    public override void InitStates()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        AddState(EnemyStates.Idle, new Enemy_Idle_State());
-        statesDic[EnemyStates.Idle].AddTriggers(new WaitTimeTrigger(EnemyStates.Patrol, param.IdleTime));
-
-        AddState(EnemyStates.Patrol, new Enemy_Patrol_State());
-        statesDic[EnemyStates.Patrol].AddTriggers(new WaitTimeTrigger(EnemyStates.Idle, param.partrolTime));
+        if(collision.gameObject.layer==LayerMask.NameToLayer("Ground"))
+        {
+            EventsManager.Instance.Invoke(this.gameObject, EventType.onEnemyHitWall);
+        }
     }
 }

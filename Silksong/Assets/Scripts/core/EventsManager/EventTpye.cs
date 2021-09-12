@@ -5,7 +5,10 @@ public enum EventType
 {
     onTakeDamager,
     onMakeDamager,
-    onDie
+    onDie,
+
+    //Enemy Behavious
+    onEnemyHitWall,
 }
 
 public class EventDate

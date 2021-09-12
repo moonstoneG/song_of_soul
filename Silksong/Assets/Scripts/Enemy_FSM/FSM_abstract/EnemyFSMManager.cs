@@ -8,18 +8,20 @@ using UnityEngine;
 public abstract class EnemyFSMManager : MonoBehaviour
 {
 
-    //private Animator anim;
-    //private AudioSource audio;
-    public  Enemy_Parameters param;
+    public Animator animator;
+    public AudioSource audio;
+    public Rigidbody2D rigidbody;
     /// /// <summary>
     /// 当前状态
     /// </summary>
     public EnemyFSMBaseState currentState;
+    [DisplayOnly]
     public EnemyStates currentStateID;
     /// <summary>
     /// 默认状态
     /// </summary>
     public EnemyFSMBaseState defaultState;
+    [DisplayOnly]
     public EnemyStates defaultStateID;
     /// <summary>
     /// 当前状态机包含的所以状态列表
@@ -28,7 +30,7 @@ public abstract class EnemyFSMManager : MonoBehaviour
     /// <summary>
     /// 配置状态列表及其对应条件列表的SO文件
     /// </summary>
-    public List<AS_2D.FSM.StateConfig_SO> stateConfig_SO;
+    public List<State_SO_Config> stateConfigs;
 
     public void ChangeState(EnemyStates state)
     {
@@ -81,46 +83,42 @@ public abstract class EnemyFSMManager : MonoBehaviour
     {
         //Debug.Log("initStates通过SO物体加载对应状态逻辑配置");
         //为当前状态管理添加所有配置状态
-        //for (int i = 0; i < stateConfig_SO.Count; i++)
-        //{
-
-        //    EnemyFSMBaseState temp = AddState(stateConfig_SO[i].stateID);
-        //    //添加对应状态的条件触发列表
-        //    for (int j = 0; j < stateConfig_SO[i].trigger_IDs.Count; j++)
-        //    {
-        //        temp.AddTriggers(stateConfig_SO[i].trigger_IDs[j]);
-        //    }
-        //    //为对应状态添加条件-状态的触发字典
-        //    for (int k = 0; k < stateConfig_SO[i].map.Count; k++)
-        //    {
-        //        //Debug.Log(stateConfig_SO[i].map[k].triggerID+"," + stateConfig_SO[i].map[k].stateID);
-        //        temp.AddTriggerStateID_map(stateConfig_SO[i].map[k].triggerID, stateConfig_SO[i].map[k].stateID);
-        //    }
-        //}
+        for (int i = 0; i < stateConfigs.Count; i++)
+        {
+            EnemyFSMBaseState tem = stateConfigs[i].stateConfig ;
+            tem.ClearTriggers();
+            foreach(var value in stateConfigs[i].triggerList)
+            {
+                tem.AddTriggers(value as EnemyFSMBaseTrigger);
+            }
+            statesDic.Add(stateConfigs[i].stateID, tem);
+        }
 
         ////组件获取
-        //if (GetComponent<Animator>()!= null)
-        //{
-        //    anim = GetComponent<Animator>();
-        //}
-        //if (GetComponent<AudioSource>()!=null)
-        //{
-        //    audio = GetComponent<AudioSource>();
-        //}
+        if (GetComponent<Animator>() != null)
+        {
+            animator = GetComponent<Animator>();
+        }
+        if (GetComponent<AudioSource>() != null)
+        {
+            audio = GetComponent<AudioSource>();
+        }
+        if(GetComponent<Rigidbody2D>()!=null)
+        {
+            rigidbody = GetComponent<Rigidbody2D>();
+        }
 
     }
 
     private void Awake()
     {
-        if (!param.rigidbody)
-            param.rigidbody = GetComponent<Rigidbody2D>();
-        if (!param.animator)
-            param.animator = GetComponent<Animator>();
+        statesDic.Clear();
         InitStates();
     }
 
     private void Start()
     {
+        
         //默认状态设置
         currentStateID = defaultStateID;
         currentState = statesDic[currentStateID];

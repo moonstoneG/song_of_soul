@@ -3,21 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public abstract class EnemyFSMBaseState
+[Serializable]
+public  class EnemyFSMBaseState
 {
-    public EnemyFSMManager fsmManager;
-    public EnemyStates stateID;
+    protected EnemyFSMManager fsmManager;
+    [DisplayOnly]
+    public  EnemyStates stateID;
     /// <summary>
     /// 默认不赋值时，获取到为NullStateID枚举值，请在对应基类赋对应枚举ID值
     /// </summary>
-    public EnemyStates StateID
-    {
-        get { return stateID; }
-    }
 
     protected List<EnemyFSMBaseTrigger> triggers = new List<EnemyFSMBaseTrigger>();
-  
+    public void ClearTriggers()
+    {
+        triggers.Clear();
+    }
 
 
 
@@ -30,7 +30,7 @@ public abstract class EnemyFSMBaseState
     /// 初始化方法，必要操作为赋值sateID(自行编码赋值)，可做其他操作实现
     /// </summary>
     /// <param name="fsm_StateID">赋值sateID</param>
-    protected abstract void InitState();
+    protected virtual void InitState() { triggers.Clear(); }
 
     /// <summary>
     /// 为该状态添加条件列表类
@@ -72,7 +72,7 @@ public abstract class EnemyFSMBaseState
     /// <summary>
     /// 状态持续及刷新
     /// </summary>
-    public abstract void Act_State(EnemyFSMManager fSM_Manager);
+    public virtual void Act_State(EnemyFSMManager fSM_Manager) { }
     /// <summary>
     /// 达到触发其他状态的条件然后执行该状态
     /// </summary>
@@ -86,6 +86,4 @@ public abstract class EnemyFSMBaseState
             }
         }
     }
-
-
 }
