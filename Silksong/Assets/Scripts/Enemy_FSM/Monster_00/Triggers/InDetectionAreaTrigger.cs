@@ -11,7 +11,7 @@ public class InDetectionAreaTrigger :EnemyFSMBaseTrigger
     {
         triggerID = EnemyTrigger.InDetectionAreaTrigger;
     }
-    public override bool IsTriggerReach(EnemyFSMManager fsm_Manager)
+    public override bool IsTriggerReach(FSMManager<EnemyStates, EnemyTrigger> fsm_Manager)
     {
         if (detectTarget == null)
             return false;

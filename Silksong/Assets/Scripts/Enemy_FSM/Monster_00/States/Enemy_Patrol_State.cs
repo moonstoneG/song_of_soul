@@ -9,7 +9,7 @@ public class Enemy_Patrol_State : EnemyFSMBaseState
 
     public  float rayToGroundDistance;
 
-    public override void Act_State(EnemyFSMManager fSM_Manager)
+    public override void Act_State(FSMManager<EnemyStates,EnemyTrigger> fSM_Manager)
     {
         fsmManager = fSM_Manager;
         Move();
@@ -19,7 +19,7 @@ public class Enemy_Patrol_State : EnemyFSMBaseState
             DetectionPlatformBoundary();
         }
     }
-    public override void EnterState(EnemyFSMManager fSM_Manager)
+    public override void EnterState(FSMManager<EnemyStates, EnemyTrigger> fSM_Manager)
     {
         fsmManager = fSM_Manager;
         if (isBack)

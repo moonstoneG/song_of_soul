@@ -14,7 +14,7 @@ public class HitWallTrigger :EnemyFSMBaseTrigger
         isSigned = false;
         
     }
-    public override bool IsTriggerReach(EnemyFSMManager fsm_Manager)
+    public override bool IsTriggerReach(FSMManager<EnemyStates, EnemyTrigger> fsm_Manager)
     {
         if(!isSigned)
         {

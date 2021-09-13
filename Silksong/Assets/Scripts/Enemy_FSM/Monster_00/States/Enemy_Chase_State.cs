@@ -9,7 +9,7 @@ public class Enemy_Chase_State :EnemyFSMBaseState
 
     private Vector3 v;
 
-    public override void Act_State(EnemyFSMManager fSM_Manager)
+    public override void Act_State(FSMManager<EnemyStates, EnemyTrigger> fSM_Manager)
     {
         v = target.transform.position - fSM_Manager.transform.position;
         if (v.x > 0)

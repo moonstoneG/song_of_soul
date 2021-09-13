@@ -5,7 +5,7 @@ using UnityEngine;
 
 
 
-public abstract class EnemyFSMManager : MonoBehaviour
+public abstract class FSMManager<T1,T2> : MonoBehaviour
 {
 
     public Animator animator;
@@ -14,25 +14,25 @@ public abstract class EnemyFSMManager : MonoBehaviour
     /// /// <summary>
     /// 当前状态
     /// </summary>
-    public EnemyFSMBaseState currentState;
+    public FSMBaseState<T1,T2> currentState;
     [DisplayOnly]
-    public EnemyStates currentStateID;
+    public T1 currentStateID;
     /// <summary>
     /// 默认状态
     /// </summary>
-    public EnemyFSMBaseState defaultState;
+    public FSMBaseState<T1,T2> defaultState;
     [DisplayOnly]
-    public EnemyStates defaultStateID;
+    public T1 defaultStateID;
     /// <summary>
     /// 当前状态机包含的所以状态列表
     /// </summary>
-    public Dictionary<EnemyStates, EnemyFSMBaseState> statesDic = new Dictionary<EnemyStates, EnemyFSMBaseState>();
+    public Dictionary<T1, FSMBaseState<T1,T2>> statesDic = new Dictionary<T1, FSMBaseState<T1,T2>>();
     /// <summary>
     /// 配置状态列表及其对应条件列表的SO文件
     /// </summary>
-    public List<State_SO_Config> stateConfigs;
 
-    public void ChangeState(EnemyStates state)
+
+    public void ChangeState(T1 state)
     {
         if (currentState != null)
             currentState.ExitState(this);
@@ -48,7 +48,7 @@ public abstract class EnemyFSMManager : MonoBehaviour
         currentState.EnterState(this);
     }
 
-    public EnemyFSMBaseState AddState(EnemyStates state)
+    public FSMBaseState<T1,T2> AddState(T1 state)
     {
         //Debug.Log(triggerID);
 
@@ -61,17 +61,17 @@ public abstract class EnemyFSMManager : MonoBehaviour
         }
         else
         {
-            EnemyFSMBaseState temp = Activator.CreateInstance(type) as EnemyFSMBaseState;
+            FSMBaseState<T1,T2> temp = Activator.CreateInstance(type) as FSMBaseState<T1,T2>;
             statesDic.Add(state,temp);
             return temp;
         }
     }
-    public EnemyFSMBaseState AddState(EnemyStates state,EnemyFSMBaseState stateClass)
+    public FSMBaseState<T1,T2> AddState(T1 state,FSMBaseState<T1,T2> stateClass)
     {
         statesDic.Add(state, stateClass);
         return stateClass;
     }
-    public void RemoveState(EnemyStates state)
+    public void RemoveState(T1 state)
     {
         if (statesDic.ContainsKey(state))
             statesDic.Remove(state);
@@ -79,21 +79,16 @@ public abstract class EnemyFSMManager : MonoBehaviour
     /// <summary>
     /// 用于初始化状态机的方法，添加所有状态，及其条件映射表，获取部分组件等。Awake时执行，可不使用基类方法手动编码加载
     /// </summary>
+    /// 
+
+    public virtual void InitWithScriptableObject()
+    {
+    }
     public virtual void InitStates()
     {
-        //Debug.Log("initStates通过SO物体加载对应状态逻辑配置");
-        //为当前状态管理添加所有配置状态
-        for (int i = 0; i < stateConfigs.Count; i++)
-        {
-            EnemyFSMBaseState tem = stateConfigs[i].stateConfig ;
-            tem.ClearTriggers();
-            foreach(var value in stateConfigs[i].triggerList)
-            {
-                tem.AddTriggers(value as EnemyFSMBaseTrigger);
-            }
-            statesDic.Add(stateConfigs[i].stateID, tem);
-        }
 
+
+        InitWithScriptableObject();
         ////组件获取
         if (GetComponent<Animator>() != null)
         {
@@ -121,8 +116,8 @@ public abstract class EnemyFSMManager : MonoBehaviour
         
         //默认状态设置
         currentStateID = defaultStateID;
-        currentState = statesDic[currentStateID];
-
+        //currentState = statesDic[currentStateID];
+        ChangeState(currentStateID);
     }
 
     private void Update()
@@ -139,8 +134,25 @@ public abstract class EnemyFSMManager : MonoBehaviour
         {
             Debug.LogError("currentState为空");
         }
-
-
     }
 
+}
+
+
+public class EnemyFSMManager : FSMManager<EnemyStates, EnemyTrigger> 
+{
+    public List<Enemy_State_SO_Config> stateConfigs;
+    public override void InitWithScriptableObject()
+    {
+        for (int i = 0; i < stateConfigs.Count; i++)
+        {
+            FSMBaseState<EnemyStates, EnemyTrigger> tem = stateConfigs[i].stateConfig;
+            tem.ClearTriggers();
+            foreach (var value in stateConfigs[i].triggerList)
+            {
+                tem.AddTriggers(value as FSMBaseTrigger<EnemyStates, EnemyTrigger>);
+            }
+            statesDic.Add(stateConfigs[i].stateID, tem);
+        }
+    }
 }

@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public  class EnemyFSMBaseState
+public  class FSMBaseState<T1,T2>
 {
-    protected EnemyFSMManager fsmManager;
+    protected FSMManager<T1,T2> fsmManager;
     [DisplayOnly]
-    public  EnemyStates stateID;
+    public  T1 stateID;
     /// <summary>
     /// 默认不赋值时，获取到为NullStateID枚举值，请在对应基类赋对应枚举ID值
     /// </summary>
 
-    protected List<EnemyFSMBaseTrigger> triggers = new List<EnemyFSMBaseTrigger>();
+    protected List<FSMBaseTrigger<T1,T2>> triggers = new List<FSMBaseTrigger<T1,T2>>();
     public void ClearTriggers()
     {
         triggers.Clear();
@@ -21,7 +21,7 @@ public  class EnemyFSMBaseState
 
 
 
-    public EnemyFSMBaseState()
+    public FSMBaseState()
     {
         InitState();
     }
@@ -37,7 +37,7 @@ public  class EnemyFSMBaseState
     /// </summary>
     /// <param name="triggerID">要添加的条件的triggerID枚举，确保该枚举值和对应trgger类命对应正确</param>
 
-    public void AddTriggers(EnemyTrigger triggerID,EnemyStates targetState) 
+    public void AddTriggers(T2 triggerID,T1 targetState) 
     {
         //Debug.Log(triggerID);
 
@@ -49,11 +49,11 @@ public  class EnemyFSMBaseState
         }
         else 
         {
-            triggers.Add(Activator.CreateInstance(type) as EnemyFSMBaseTrigger);
+            triggers.Add(Activator.CreateInstance(type) as FSMBaseTrigger<T1,T2>);
             triggers[triggers.Count - 1].targetState = targetState;
         }
     }
-    public void AddTriggers(EnemyFSMBaseTrigger trigger)
+    public void AddTriggers(FSMBaseTrigger<T1,T2> trigger)
     {
         triggers.Add(trigger);
     }
@@ -62,21 +62,21 @@ public  class EnemyFSMBaseState
     /// <summary>
     /// 进入状态时调用
     /// </summary>
-    public virtual void EnterState(EnemyFSMManager fSM_Manager) { }
+    public virtual void EnterState(FSMManager<T1,T2> fSM_Manager) { }
 
     /// <summary>
     /// 退出状态时调用
     /// </summary>
-    public virtual void ExitState(EnemyFSMManager fSM_Manager) { }
+    public virtual void ExitState(FSMManager<T1,T2> fSM_Manager) { }
 
     /// <summary>
     /// 状态持续及刷新
     /// </summary>
-    public virtual void Act_State(EnemyFSMManager fSM_Manager) { }
+    public virtual void Act_State(FSMManager<T1,T2> fSM_Manager) { }
     /// <summary>
     /// 达到触发其他状态的条件然后执行该状态
     /// </summary>
-    public virtual void TriggerState(EnemyFSMManager fsm_Manager)
+    public virtual void TriggerState(FSMManager<T1,T2> fsm_Manager)
     {
         for (int i = 0; i < triggers.Count; i++)
         {
@@ -86,4 +86,8 @@ public  class EnemyFSMBaseState
             }
         }
     }
+}
+public class EnemyFSMBaseState : FSMBaseState<EnemyStates,EnemyTrigger> 
+{
+
 }

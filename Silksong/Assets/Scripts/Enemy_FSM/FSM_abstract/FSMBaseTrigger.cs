@@ -5,22 +5,21 @@ using System;
 using System.Runtime.Serialization;
 
 [Serializable]
-public  class EnemyFSMBaseTrigger
+public  class FSMBaseTrigger<T1,T2>
 {
     [DisplayOnly]
-    public EnemyTrigger triggerID;
-    public EnemyStates targetState;
+    public T2 triggerID;
+    public T1 targetState;
     /// <summary>
     /// 构造赋值triggerTransitionID初始值
     /// </summary>
     /// <param name="trigger_TransitionID"></param>
     /// 
-    public EnemyFSMBaseTrigger()
+    public FSMBaseTrigger()
     {
-        this.targetState = EnemyStates.Enemy_Idle_State;
         InitTrigger();
     }
-    public EnemyFSMBaseTrigger(EnemyStates targetState)
+    public FSMBaseTrigger(T1 targetState)
     {
         this.targetState = targetState;
         InitTrigger();
@@ -36,6 +35,15 @@ public  class EnemyFSMBaseTrigger
     /// </summary>
     /// <param name="fsm_Manager">管理相应状态类的fsm_manager</param>
     /// <returns></returns>
-    public virtual bool IsTriggerReach(EnemyFSMManager fsm_Manager) { return false; }
+    public virtual bool IsTriggerReach(FSMManager<T1,T2> fsm_Manager) { return false; }
 
+}
+public class EnemyFSMBaseTrigger : FSMBaseTrigger<EnemyStates, EnemyTrigger> 
+{
+    public EnemyFSMBaseTrigger(EnemyStates targetState):base(targetState)
+    {
+
+    }
+    public EnemyFSMBaseTrigger()
+    { }
 }

@@ -5,38 +5,39 @@ using System;
 using UnityEditor;
 using System.Reflection;
 
-[CreateAssetMenu(fileName = "StateConfig_SO", menuName = "SO敌人配置", order = 2)]
-public class State_SO_Config : ScriptableObject
+
+public class State_SO_Config<T1,T2,T3> : ScriptableObject
 {
     [HideInInspector]
     [SerializeReference]
-    public EnemyStates lastStateID;
+    public T1 lastStateID;
     [HideInInspector]
     [SerializeReference]
-    public EnemyTrigger lastTriggerID;
-    [Header("--------------------State Config Area------------------------")]
-    public EnemyStates stateID;
+    public T2 lastTriggerID;
+    [Header("----------------------State Config Area------------------------")]
+    public T1 stateID;
     [SerializeReference]
-    public EnemyFSMBaseState stateConfig;
+    public T3 stateConfig;
     [Header("----------------------Trigger Config Area----------------------")]
     [Space(20)]
-    public EnemyTrigger triggerID;
+    public T2 triggerID;
     [SerializeReference]
     public System.Object triggerConfig;
     [Header("-----------------------Triggers List Area----------------------")]
     [Space(20)]
     [SerializeReference]
     public List<System.Object> triggerList;
-
-    private Type triggerType;
-    private Type stateType;
+    [NonSerialized]
+    public Type triggerType;
+    [NonSerialized]
+    public Type stateType;
 
     private void Awake()
     {
         lastStateID = stateID;
         stateType = Type.GetType(stateID.ToString());
         if (stateType != null)
-            stateConfig = Activator.CreateInstance(stateType) as EnemyFSMBaseState;
+            stateConfig = (T3)Activator.CreateInstance(stateType) ;
         else
             Debug.LogError("找不到所对应的State，请检查枚举名称是否与类名一致。");
 
@@ -49,117 +50,128 @@ public class State_SO_Config : ScriptableObject
             Debug.LogError("找不到所对应的Trigger，请检查枚举名称是否与类名一致。");
     }
 
-    [CustomEditor(typeof(State_SO_Config))]
-    public class State_SO_Config_Editor:Editor
+    
+}
+
+
+[CreateAssetMenu(fileName = "Enemy_State_SO_Config", menuName = "SO敌人配置", order = 2)]
+public class Enemy_State_SO_Config : State_SO_Config<EnemyStates, EnemyTrigger,EnemyFSMBaseState> { }
+
+
+
+[CustomEditor(typeof(Enemy_State_SO_Config))]
+public class State_SO_Config_Editor : Editor
+{
+
+    public override void OnInspectorGUI()
     {
-       
-        public override void OnInspectorGUI()
+        base.OnInspectorGUI();
+        Enemy_State_SO_Config config = target as Enemy_State_SO_Config;
+        if (config.lastStateID != config.stateID)
         {
-            base.OnInspectorGUI();
-            State_SO_Config config = target as State_SO_Config;
-            if(config.lastStateID!=config.stateID)
-            {
-                config.lastStateID = config.stateID;
-                config.stateType = Type.GetType(config.stateID.ToString());
-                if (config.stateType != null)
-                    config.stateConfig = Activator.CreateInstance(config.stateType) as EnemyFSMBaseState;
-                else
-                    Debug.LogError("找不到所对应的State，请检查枚举名称是否与类名一致。");
+            config.lastStateID = config.stateID;
+            config.stateType = Type.GetType(config.stateID.ToString());
+            if (config.stateType != null)
+                config.stateConfig = Activator.CreateInstance(config.stateType) as EnemyFSMBaseState;
+            else
+                Debug.LogError("找不到所对应的State，请检查枚举名称是否与类名一致。");
 
-            }
-            if (config.lastTriggerID != config.triggerID)
-            {
-                config.lastTriggerID = config.triggerID;
-                config.triggerType = Type.GetType(config.triggerID.ToString());
-                if (config.triggerType != null)
-                    config.triggerConfig = Activator.CreateInstance(config.triggerType);
-                else
-                    Debug.LogError("找不到所对应的Trigger，请检查枚举名称是否与类名一致。");
-
-            }
-            if(GUILayout.Button("Add to List"))
-            {
-                config.triggerList.Add(CloneObject(config.triggerConfig));
-            }
         }
-
-
-        System.Object DeepCloneObject(System.Object obj)
+        if (config.lastTriggerID != config.triggerID)
         {
-            if (obj == null)
-                return null;
-            Type type = obj.GetType();
-            System.Object outObj = Activator.CreateInstance(type);
-            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance);
-            FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            foreach(PropertyInfo property in properties)
-            {
-                if(property.CanWrite)
-                {
-                    if(property.PropertyType.IsValueType|| property.PropertyType.IsEnum|| property.PropertyType.Equals(typeof(String)))
-                    {
-                        property.SetValue(outObj, property.GetValue(obj,null),null);
-                    }
-                    else
-                    {
-                        System.Object insideValue = property.GetValue(obj, null);
-                        if(insideValue==null)
-                        {
-                            property.SetValue(outObj, null, null);
-                        }else
-                        {
-                            property.SetValue(outObj, DeepCloneObject(insideValue), null);
-                        }
-                    }
-                }
-            }
-            foreach (FieldInfo field in fields)
-            {
-             
-            if(field.FieldType.IsValueType||field.FieldType.IsEnum||field.FieldType.Equals(typeof(string)))
-                {
-                    field.SetValue(outObj, field.GetValue(obj));
-                }else
-                {
-                    var insideField = field.GetValue(obj);
-                    if(insideField==null)
-                    {
-                        field.SetValue(outObj, null);
-                    }else
-                    {
-                        field.SetValue(outObj, DeepCloneObject(insideField));
-                    }
-                }
-            }
-            return outObj;
+            config.lastTriggerID = config.triggerID;
+            config.triggerType = Type.GetType(config.triggerID.ToString());
+            if (config.triggerType != null)
+                config.triggerConfig = Activator.CreateInstance(config.triggerType);
+            else
+                Debug.LogError("找不到所对应的Trigger，请检查枚举名称是否与类名一致。");
+
         }
-        System.Object CloneObject(System.Object obj)
+        if (GUILayout.Button("Add to List"))
         {
-            if (obj == null)
-                return null;
-            Type type = obj.GetType();
-            System.Object outObj = Activator.CreateInstance(type);
-            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            foreach (PropertyInfo property in properties)
+            config.triggerList.Add(CloneObject(config.triggerConfig));
+        }
+    }
+
+
+    System.Object DeepCloneObject(System.Object obj)
+    {
+        if (obj == null)
+            return null;
+        Type type = obj.GetType();
+        System.Object outObj = Activator.CreateInstance(type);
+        PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        foreach (PropertyInfo property in properties)
+        {
+            if (property.CanWrite)
             {
-                if (property.CanWrite)
+                if (property.PropertyType.IsValueType || property.PropertyType.IsEnum || property.PropertyType.Equals(typeof(String)))
                 {
                     property.SetValue(outObj, property.GetValue(obj, null), null);
                 }
+                else
+                {
+                    System.Object insideValue = property.GetValue(obj, null);
+                    if (insideValue == null)
+                    {
+                        property.SetValue(outObj, null, null);
+                    }
+                    else
+                    {
+                        property.SetValue(outObj, DeepCloneObject(insideValue), null);
+                    }
+                }
             }
-            foreach (FieldInfo field in fields)
+        }
+        foreach (FieldInfo field in fields)
+        {
+
+            if (field.FieldType.IsValueType || field.FieldType.IsEnum || field.FieldType.Equals(typeof(string)))
             {
                 field.SetValue(outObj, field.GetValue(obj));
             }
-            return outObj;
+            else
+            {
+                var insideField = field.GetValue(obj);
+                if (insideField == null)
+                {
+                    field.SetValue(outObj, null);
+                }
+                else
+                {
+                    field.SetValue(outObj, DeepCloneObject(insideField));
+                }
+            }
         }
+        return outObj;
+    }
+    System.Object CloneObject(System.Object obj)
+    {
+        if (obj == null)
+            return null;
+        Type type = obj.GetType();
+        System.Object outObj = Activator.CreateInstance(type);
+        PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        foreach (PropertyInfo property in properties)
+        {
+            if (property.CanWrite)
+            {
+                property.SetValue(outObj, property.GetValue(obj, null), null);
+            }
+        }
+        foreach (FieldInfo field in fields)
+        {
+            field.SetValue(outObj, field.GetValue(obj));
+        }
+        return outObj;
     }
 }
 
 
-public class DisplayOnly:PropertyAttribute{ }
 
+public class DisplayOnly:PropertyAttribute{ }
 [CustomPropertyDrawer(typeof(DisplayOnly))]
 public class DisplayOnlyDraw:PropertyDrawer
 {
