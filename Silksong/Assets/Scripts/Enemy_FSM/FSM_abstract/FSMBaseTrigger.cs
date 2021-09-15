@@ -10,11 +10,6 @@ public  class FSMBaseTrigger<T1,T2>
     [DisplayOnly]
     public T2 triggerID;
     public T1 targetState;
-    /// <summary>
-    /// 构造赋值triggerTransitionID初始值
-    /// </summary>
-    /// <param name="trigger_TransitionID"></param>
-    /// 
     public FSMBaseTrigger()
     {
         InitTrigger();
@@ -26,9 +21,6 @@ public  class FSMBaseTrigger<T1,T2>
     }
 
 
-    /// <summary>
-    /// 初始化方法，必要操作为赋值triggerID(自行编码赋值)，可做其他操作实现
-    /// </summary>
     protected virtual void InitTrigger() { }
     /// <summary>
     /// 是否达到该条件的判断方法
@@ -40,10 +32,6 @@ public  class FSMBaseTrigger<T1,T2>
 }
 public class EnemyFSMBaseTrigger : FSMBaseTrigger<EnemyStates, EnemyTrigger> 
 {
-    public EnemyFSMBaseTrigger(EnemyStates targetState):base(targetState)
-    {
-
-    }
-    public EnemyFSMBaseTrigger()
-    { }
+    public EnemyFSMBaseTrigger(EnemyStates targetState):base(targetState){ }
+    public EnemyFSMBaseTrigger(){ }
 }

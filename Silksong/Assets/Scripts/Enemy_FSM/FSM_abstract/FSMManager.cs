@@ -84,10 +84,8 @@ public abstract class FSMManager<T1,T2> : MonoBehaviour
     public virtual void InitWithScriptableObject()
     {
     }
-    public virtual void InitStates()
+    public virtual void InitManager()
     {
-
-
         InitWithScriptableObject();
         ////组件获取
         if (GetComponent<Animator>() != null)
@@ -108,7 +106,7 @@ public abstract class FSMManager<T1,T2> : MonoBehaviour
     private void Awake()
     {
         statesDic.Clear();
-        InitStates();
+        InitManager();
     }
 
     private void Start()
@@ -138,7 +136,9 @@ public abstract class FSMManager<T1,T2> : MonoBehaviour
 
 }
 
-
+/// <summary>
+///构建Enemy状态机管理器，并为其添加SO配置功能
+/// </summary>
 public class EnemyFSMManager : FSMManager<EnemyStates, EnemyTrigger> 
 {
     public List<Enemy_State_SO_Config> stateConfigs;
