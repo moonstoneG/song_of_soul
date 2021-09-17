@@ -59,6 +59,13 @@ public class Enemy_State_SO_Config : State_SO_Config<EnemyStates, EnemyTrigger,E
 
 
 
+
+
+
+
+/// <summary>
+/// 辅助工具，用于Inspirte面板的刷新
+/// </summary>
 [CustomEditor(typeof(Enemy_State_SO_Config))]
 public class State_SO_Config_Editor : Editor
 {
@@ -170,7 +177,9 @@ public class State_SO_Config_Editor : Editor
 }
 
 
-
+/// <summary>
+/// 构建在Inspirte只可显示，不可修改的属性
+/// </summary>
 public class DisplayOnly:PropertyAttribute{ }
 [CustomPropertyDrawer(typeof(DisplayOnly))]
 public class DisplayOnlyDraw:PropertyDrawer

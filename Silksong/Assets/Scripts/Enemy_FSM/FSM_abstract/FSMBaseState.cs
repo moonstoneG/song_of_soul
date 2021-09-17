@@ -2,50 +2,45 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// 状态机中对状态的抽象,具体用法可参考Enemy状态机的构建模式。
+/// </summary>
+/// <typeparam name="T1">必须是枚举类型！！且为State枚举。</typeparam>
+/// <typeparam name="T2">必须是枚举类型！！且为Trigger枚举。</typeparam>
 [Serializable]
 public  class FSMBaseState<T1,T2>
 {
     protected FSMManager<T1,T2> fsmManager;
     [DisplayOnly]
     public  T1 stateID;
-    /// <summary>
-    /// 默认不赋值时，获取到为NullStateID枚举值，请在对应基类赋对应枚举ID值
-    /// </summary>
 
     protected List<FSMBaseTrigger<T1,T2>> triggers = new List<FSMBaseTrigger<T1,T2>>();
+
     public void ClearTriggers()
     {
         triggers.Clear();
     }
-
-
-
     public FSMBaseState()
     {
         InitState();
     }
 
     /// <summary>
-    /// 初始化方法，必要操作为赋值sateID(自行编码赋值)，可做其他操作实现
+    /// 状态初始化，base包含清空TriggerList以供重新加载Trigger。
     /// </summary>
-    /// <param name="fsm_StateID">赋值sateID</param>
     protected virtual void InitState() { triggers.Clear(); }
 
-    /// <summary>
-    /// 为该状态添加条件列表类
-    /// </summary>
-    /// <param name="triggerID">要添加的条件的triggerID枚举，确保该枚举值和对应trgger类命对应正确</param>
+
 
     public void AddTriggers(T2 triggerID,T1 targetState) 
     {
         //Debug.Log(triggerID);
 
-        Type type = Type.GetType(triggerID + "Trigger");
+        Type type = Type.GetType(triggerID.ToString());
         if (type == null)
         {
             Debug.LogError(triggerID + "无法添加到" + stateID + "的triggers列表");
-            Debug.LogError("检查满足Trigger条件的条件枚举，对应条件类命加上“Trigger”，如枚举值为PressBtn，条件类名为PreesBtnTrigger，便于配置加载；");
+            Debug.LogError("未找到对应的Trigger，检查该Trigger的类名是否与枚举名保持一致。");
         }
         else 
         {
@@ -74,7 +69,7 @@ public  class FSMBaseState<T1,T2>
     /// </summary>
     public virtual void Act_State(FSMManager<T1,T2> fSM_Manager) { }
     /// <summary>
-    /// 达到触发其他状态的条件然后执行该状态
+    /// 遍历Trigger并跳转到满足条件的对应trigger所指向的状态。
     /// </summary>
     public virtual void TriggerState(FSMManager<T1,T2> fsm_Manager)
     {
@@ -87,6 +82,8 @@ public  class FSMBaseState<T1,T2>
         }
     }
 }
+
+
 public class EnemyFSMBaseState : FSMBaseState<EnemyStates,EnemyTrigger> 
 {
 
