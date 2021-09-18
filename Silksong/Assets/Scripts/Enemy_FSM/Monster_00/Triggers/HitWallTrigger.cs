@@ -5,20 +5,21 @@ using UnityEngine;
 public class HitWallTrigger :EnemyFSMBaseTrigger
 {
     private bool isHitWall;
-    public bool isSigned=false;
-    protected override void InitTrigger()
+    private bool isSigned=false;
+    public override void InitTrigger(FSMManager<EnemyStates, EnemyTriggers> fsm_Manager)
     {
-        base.InitTrigger();
-        triggerID = EnemyTrigger.HitWallTrigger;
+        base.InitTrigger(fsm_Manager);
+        triggerID = EnemyTriggers.HitWallTrigger;
         isHitWall = false;
         isSigned = false;
         
     }
-    public override bool IsTriggerReach(FSMManager<EnemyStates, EnemyTrigger> fsm_Manager)
+    public override bool IsTriggerReach(FSMManager<EnemyStates, EnemyTriggers> fsm_Manager)
     {
         if(!isSigned)
         {
             EventsManager.Instance.AddListener(fsm_Manager.gameObject, EventType.onEnemyHitWall, HitTheWall);
+            EventsManager.Instance.AddListener(fsm_Manager.gameObject, EventType.onEnemyHitWall, debug);
             isSigned = true;
         }
 
@@ -30,7 +31,10 @@ public class HitWallTrigger :EnemyFSMBaseTrigger
         else
             return false;
     }
-
+    private void debug()
+    {
+        Debug.Log("Hit");
+    }
     private void HitTheWall()
     {
         isHitWall = true;

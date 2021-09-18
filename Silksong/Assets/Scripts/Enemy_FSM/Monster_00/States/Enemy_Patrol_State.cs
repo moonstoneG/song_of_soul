@@ -6,10 +6,9 @@ public class Enemy_Patrol_State : EnemyFSMBaseState
 {
     public bool isBack;
     public Vector3 moveSpeed;
-
     public  float rayToGroundDistance;
 
-    public override void Act_State(FSMManager<EnemyStates,EnemyTrigger> fSM_Manager)
+    public override void Act_State(FSMManager<EnemyStates,EnemyTriggers> fSM_Manager)
     {
         fsmManager = fSM_Manager;
         Move();
@@ -19,24 +18,25 @@ public class Enemy_Patrol_State : EnemyFSMBaseState
             DetectionPlatformBoundary();
         }
     }
-    public override void EnterState(FSMManager<EnemyStates, EnemyTrigger> fSM_Manager)
+    public override void EnterState(FSMManager<EnemyStates, EnemyTriggers> fSM_Manager)
     {
         fsmManager = fSM_Manager;
+        
         if (isBack)
         {
             Turn();
             var rayHit= Physics2D.Raycast(fsmManager.transform.position + new Vector3((moveSpeed.x > 0 ? 1 : -1), 0, 0) * fsmManager.GetComponent<Collider2D>().bounds.size.x, Vector2.down);
-            rayToGroundDistance = rayHit.distance;
+            rayToGroundDistance = rayHit.distance+0.1f;
         }
     }
-    protected override void InitState()
+    public override void InitState(FSMManager<EnemyStates, EnemyTriggers> fSM_Manager)
     {
-        base.InitState();
+        base.InitState(fSM_Manager);
         stateID = EnemyStates.Enemy_Patrol_State;
 
         if (isBack)
         {
-            EventsManager.Instance.AddListener(fsmManager.gameObject, EventType.onEnemyHitWall, HitWall);
+            EventsManager.Instance.AddListener(fSM_Manager.gameObject, EventType.onEnemyHitWall, HitWall);
         }
     }
     private void Turn()
@@ -57,7 +57,7 @@ public class Enemy_Patrol_State : EnemyFSMBaseState
     }
     private void Move()
     {
-        fsmManager.rigidbody.velocity = moveSpeed;
+        fsmManager.gameObject.transform.position +=  moveSpeed*Time.deltaTime;
     }
     private void DetectionPlatformBoundary()
     {
@@ -65,14 +65,10 @@ public class Enemy_Patrol_State : EnemyFSMBaseState
         if(rayHit.distance>rayToGroundDistance)
         {
             Turn();
+            Debug.Log(rayHit.distance.ToString() + "  " + rayToGroundDistance.ToString());
         }
     }
 
-    private void ChangeFlyDir()
-    {
-        Vector3 randDir = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0);
-        moveSpeed = randDir.normalized * moveSpeed.magnitude;
-    }
 
 
 }

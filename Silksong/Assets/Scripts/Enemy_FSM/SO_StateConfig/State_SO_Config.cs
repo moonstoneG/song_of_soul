@@ -54,10 +54,15 @@ public class State_SO_Config<T1,T2,T3> : ScriptableObject
 }
 
 
-[CreateAssetMenu(fileName = "Enemy_State_SO_Config", menuName = "SOµ–»À≈‰÷√", order = 2)]
-public class Enemy_State_SO_Config : State_SO_Config<EnemyStates, EnemyTrigger,EnemyFSMBaseState> { }
+[CreateAssetMenu(fileName = "Enemy_State_SO_Config", menuName = "SO_Enemy≈‰÷√", order = 2)]
+public class Enemy_State_SO_Config : State_SO_Config<EnemyStates, EnemyTriggers,EnemyFSMBaseState> { }
 
 
+[CreateAssetMenu(fileName = "NPC_State_SO_Config", menuName = "SO_NPC≈‰÷√", order = 2)]
+public class NPC_State_SO_Config : State_SO_Config<NPCStates, NPCTriggers, NPCFSMBaseState> { }
+
+//[CreateAssetMenu(fileName = "Player_State_SO_Config", menuName = "SO_Player≈‰÷√", order = 2)]
+//public class Player_State_SO_Config : State_SO_Config<PlayerStates, PlayerTriggers, NPCFSMBaseState> { }
 
 
 
@@ -96,85 +101,14 @@ public class State_SO_Config_Editor : Editor
         }
         if (GUILayout.Button("Add to List"))
         {
-            config.triggerList.Add(CloneObject(config.triggerConfig));
+            config.triggerList.Add(ObjectClone.CloneObject(config.triggerConfig));
         }
     }
 
 
-    System.Object DeepCloneObject(System.Object obj)
-    {
-        if (obj == null)
-            return null;
-        Type type = obj.GetType();
-        System.Object outObj = Activator.CreateInstance(type);
-        PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-        FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-        foreach (PropertyInfo property in properties)
-        {
-            if (property.CanWrite)
-            {
-                if (property.PropertyType.IsValueType || property.PropertyType.IsEnum || property.PropertyType.Equals(typeof(String)))
-                {
-                    property.SetValue(outObj, property.GetValue(obj, null), null);
-                }
-                else
-                {
-                    System.Object insideValue = property.GetValue(obj, null);
-                    if (insideValue == null)
-                    {
-                        property.SetValue(outObj, null, null);
-                    }
-                    else
-                    {
-                        property.SetValue(outObj, DeepCloneObject(insideValue), null);
-                    }
-                }
-            }
-        }
-        foreach (FieldInfo field in fields)
-        {
 
-            if (field.FieldType.IsValueType || field.FieldType.IsEnum || field.FieldType.Equals(typeof(string)))
-            {
-                field.SetValue(outObj, field.GetValue(obj));
-            }
-            else
-            {
-                var insideField = field.GetValue(obj);
-                if (insideField == null)
-                {
-                    field.SetValue(outObj, null);
-                }
-                else
-                {
-                    field.SetValue(outObj, DeepCloneObject(insideField));
-                }
-            }
-        }
-        return outObj;
-    }
-    System.Object CloneObject(System.Object obj)
-    {
-        if (obj == null)
-            return null;
-        Type type = obj.GetType();
-        System.Object outObj = Activator.CreateInstance(type);
-        PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-        FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-        foreach (PropertyInfo property in properties)
-        {
-            if (property.CanWrite)
-            {
-                property.SetValue(outObj, property.GetValue(obj, null), null);
-            }
-        }
-        foreach (FieldInfo field in fields)
-        {
-            field.SetValue(outObj, field.GetValue(obj));
-        }
-        return outObj;
-    }
 }
+
 
 
 /// <summary>

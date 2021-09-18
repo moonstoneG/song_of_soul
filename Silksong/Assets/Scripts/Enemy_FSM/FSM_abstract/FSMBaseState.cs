@@ -13,8 +13,8 @@ public  class FSMBaseState<T1,T2>
     protected FSMManager<T1,T2> fsmManager;
     [DisplayOnly]
     public  T1 stateID;
-
-    protected List<FSMBaseTrigger<T1,T2>> triggers = new List<FSMBaseTrigger<T1,T2>>();
+    [NonSerialized]
+    public List<FSMBaseTrigger<T1,T2>> triggers = new List<FSMBaseTrigger<T1,T2>>();
 
     public void ClearTriggers()
     {
@@ -22,13 +22,13 @@ public  class FSMBaseState<T1,T2>
     }
     public FSMBaseState()
     {
-        InitState();
+        //InitState();
     }
 
     /// <summary>
     /// 状态初始化，base包含清空TriggerList以供重新加载Trigger。
     /// </summary>
-    protected virtual void InitState() { triggers.Clear(); }
+    public virtual void InitState(FSMManager<T1,T2> fSMManager) { }
 
 
 
@@ -84,7 +84,15 @@ public  class FSMBaseState<T1,T2>
 }
 
 
-public class EnemyFSMBaseState : FSMBaseState<EnemyStates,EnemyTrigger> 
+public class EnemyFSMBaseState : FSMBaseState<EnemyStates,EnemyTriggers> 
+{
+
+}
+public class NPCFSMBaseState: FSMBaseState<NPCStates, NPCTriggers> 
+{
+
+}
+public class PlayerFSMBaseState : FSMBaseState<PlayerStates, PlayerTriggers>
 {
 
 }

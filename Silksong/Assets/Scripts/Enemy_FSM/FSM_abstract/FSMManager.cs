@@ -11,6 +11,8 @@ public abstract class FSMManager<T1,T2> : MonoBehaviour
     public Animator animator;
     public AudioSource audio;
     public Rigidbody2D rigidbody;
+
+
     /// /// <summary>
     /// 当前状态
     /// </summary>
@@ -18,9 +20,9 @@ public abstract class FSMManager<T1,T2> : MonoBehaviour
     [DisplayOnly]
     public T1 currentStateID;
     /// <summary>
-    /// 默认状态
+    /// 任意状态
     /// </summary>
-    public FSMBaseState<T1,T2> defaultState;
+    public FSMBaseState<T1,T2> anyState;
     [DisplayOnly]
     public T1 defaultStateID;
     /// <summary>
@@ -114,13 +116,18 @@ public abstract class FSMManager<T1,T2> : MonoBehaviour
         
         //默认状态设置
         currentStateID = defaultStateID;
-        //currentState = statesDic[currentStateID];
         ChangeState(currentStateID);
+        if (anyState != null)
+            anyState.EnterState(this);
     }
 
     private void Update()
     {
-
+        if (anyState != null)
+        {
+            anyState.Act_State(this);
+            anyState.TriggerState(this);
+        }
         if (currentState != null)
         {
             //执行状态内容
@@ -139,20 +146,86 @@ public abstract class FSMManager<T1,T2> : MonoBehaviour
 /// <summary>
 ///构建Enemy状态机管理器，并为其添加SO配置功能
 /// </summary>
-public class EnemyFSMManager : FSMManager<EnemyStates, EnemyTrigger> 
+public class EnemyFSMManager : FSMManager<EnemyStates, EnemyTriggers> 
 {
     public List<Enemy_State_SO_Config> stateConfigs;
+    public Enemy_State_SO_Config anyStateConfig;
     public override void InitWithScriptableObject()
     {
+        if(anyStateConfig!=null)
+        {
+            anyState = ObjectClone.CloneObject(anyStateConfig.stateConfig) as FSMBaseState<EnemyStates, EnemyTriggers>;
+        }
         for (int i = 0; i < stateConfigs.Count; i++)
         {
-            FSMBaseState<EnemyStates, EnemyTrigger> tem = stateConfigs[i].stateConfig;
+            FSMBaseState<EnemyStates, EnemyTriggers> tem = ObjectClone.CloneObject(stateConfigs[i].stateConfig) as FSMBaseState<EnemyStates, EnemyTriggers>;
             tem.ClearTriggers();
             foreach (var value in stateConfigs[i].triggerList)
             {
-                tem.AddTriggers(value as FSMBaseTrigger<EnemyStates, EnemyTrigger>);
+                tem.AddTriggers(value as FSMBaseTrigger<EnemyStates, EnemyTriggers>);
+                tem.triggers[tem.triggers.Count-1].InitTrigger(this);
             }
             statesDic.Add(stateConfigs[i].stateID, tem);
+            tem.InitState(this);
         }
     }
 }
+/// <summary>
+///构建NPC状态机管理器，并为其添加SO配置功能
+/// </summary>
+public class NPCFSMManager : FSMManager<NPCStates, NPCTriggers>
+{
+    public List<NPC_State_SO_Config> stateConfigs;
+    public NPC_State_SO_Config anyStateConfig;
+    public override void InitWithScriptableObject()
+    {
+        if (anyStateConfig != null)
+        {
+            anyState = ObjectClone.CloneObject(anyStateConfig.stateConfig) as FSMBaseState<NPCStates, NPCTriggers>;
+        }
+        for (int i = 0; i < stateConfigs.Count; i++)
+        {
+            FSMBaseState<NPCStates, NPCTriggers> tem = ObjectClone.CloneObject(stateConfigs[i].stateConfig) as FSMBaseState<NPCStates, NPCTriggers>;
+            tem.ClearTriggers();
+            foreach (var value in stateConfigs[i].triggerList)
+            {
+                tem.AddTriggers(value as FSMBaseTrigger<NPCStates, NPCTriggers>);
+                tem.triggers[tem.triggers.Count - 1].InitTrigger(this);
+            }
+            statesDic.Add(stateConfigs[i].stateID, tem);
+            tem.InitState(this);
+        }
+    }
+}
+/// <summary>
+/// 构建Player状态机管理器，默认没有添加SO配置功能，
+/// 如需要，
+/// 首先取消掉下面的注释
+/// 然后打开State_SO_Config脚本，取消关于Player_State_SO_Config类的注释即可。
+/// 
+/// </summary>
+public class PlayerFSMManager : FSMManager<PlayerStates, PlayerTriggers> 
+{
+    //public List<Player_State_SO_Config> stateConfigs;
+    //public Player_State_SO_Config anyStateConfig;
+    //public override void InitWithScriptableObject()
+    //{
+    //    if (anyStateConfig != null)
+    //    {
+    //        anyState = ObjectClone.CloneObject(anyStateConfig.stateConfig) as FSMBaseState<PlayerStates, PlayerTriggers>;
+    //    }
+    //    for (int i = 0; i < stateConfigs.Count; i++)
+    //    {
+    //        FSMBaseState<PlayerStates, PlayerTriggers> tem = ObjectClone.CloneObject(stateConfigs[i].stateConfig) as FSMBaseState<PlayerStates, PlayerTriggers>;
+    //        tem.ClearTriggers();
+    //        foreach (var value in stateConfigs[i].triggerList)
+    //        {
+    //            tem.AddTriggers(value as FSMBaseTrigger<PlayerStates, PlayerTriggers>);
+    //            tem.triggers[tem.triggers.Count - 1].InitTrigger(this);
+    //        }
+    //        statesDic.Add(stateConfigs[i].stateID, tem);
+    //        tem.InitState(this);
+    //    }
+    //}
+}
+

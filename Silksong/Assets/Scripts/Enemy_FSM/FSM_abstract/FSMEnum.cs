@@ -5,6 +5,7 @@ using UnityEngine;
 
 public enum EnemyStates
 {
+    Enemy_Any_State,
     Enemy_Idle_State,
     Enemy_Patrol_State,
     Enemy_Chase_State,
@@ -13,10 +14,37 @@ public enum EnemyStates
     Enemy_Die_State
 }
 
-public enum EnemyTrigger
+public enum EnemyTriggers
 {
     WaitTimeTrigger,
     HitWallTrigger,
     InDetectionAreaTrigger
 }
 
+
+public enum NPCStates
+{
+    NPC_Idle_State,
+    NPC_Run_State
+}
+
+public enum NPCTriggers
+{
+    WaitTimeTrigger,
+    HitWallTrigger,
+    InDetectionAreaTrigger
+}
+
+public enum PlayerStates
+{
+    Player_Idle_State,
+    Player_Run_State
+}
+
+public enum PlayerTriggers
+{
+    W_Key_Down,
+    A_Key_Down,
+    S_Key_Down,
+    D_Key_Down
+}

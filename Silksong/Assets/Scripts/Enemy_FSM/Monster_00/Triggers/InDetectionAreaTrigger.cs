@@ -7,11 +7,12 @@ public class InDetectionAreaTrigger :EnemyFSMBaseTrigger
     public float detectionRadius;
     public GameObject  detectTarget;
     public bool isEnterTrigger;
-    protected override void InitTrigger()
+    public override void InitTrigger(FSMManager<EnemyStates, EnemyTriggers> fsm_Manager)
     {
-        triggerID = EnemyTrigger.InDetectionAreaTrigger;
+        base.InitTrigger(fsm_Manager);
+        triggerID = EnemyTriggers.InDetectionAreaTrigger;
     }
-    public override bool IsTriggerReach(FSMManager<EnemyStates, EnemyTrigger> fsm_Manager)
+    public override bool IsTriggerReach(FSMManager<EnemyStates, EnemyTriggers> fsm_Manager)
     {
         if (detectTarget == null)
             return false;
