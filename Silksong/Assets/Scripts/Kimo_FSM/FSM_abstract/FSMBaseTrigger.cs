@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Runtime.Serialization;
-
+/// <summary>
+/// 状态机中对Trigger的配置。可重写InitTrigger，IsTriggerReach方法。
+/// </summary>
+/// <typeparam name="T1"></typeparam>
+/// <typeparam name="T2"></typeparam>
 [Serializable]
 public  class FSMBaseTrigger<T1,T2>
 {

@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// 敌人Patrol状态，包含撞墙回头，平台边缘回头两个功能
+/// </summary>
 public class Enemy_Patrol_State : EnemyFSMBaseState
 {
     public bool isBack;

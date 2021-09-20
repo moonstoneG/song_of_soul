@@ -5,7 +5,13 @@ using System;
 using UnityEditor;
 using System.Reflection;
 
-
+/// <summary>
+/// ScriptableObject状态配置，可参考Enemy_State_SO_Config的配置方式
+/// </summary>
+/// <typeparam name="T1">StateEnum</typeparam>
+/// <typeparam name="T2">TriggerEnum</typeparam>
+/// <typeparam name="T3">StateBase</typeparam>
+/// <typeparam name="T4">TriggerBase</typeparam>
 public class State_SO_Config<T1, T2, T3, T4> : ScriptableObject
 {
     [HideInInspector]

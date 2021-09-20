@@ -2,9 +2,11 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
-
-
+/// <summary>
+/// 状态机管理器的基类
+/// </summary>
+/// <typeparam name="T1"></typeparam>
+/// <typeparam name="T2"></typeparam>
 public abstract class FSMManager<T1,T2> : MonoBehaviour
 {
 
@@ -226,7 +228,7 @@ public class NPCFSMManager : FSMManager<NPCStates, NPCTriggers>
 /// 构建Player状态机管理器，默认没有添加SO配置功能，
 /// 如需要，
 /// 首先取消掉下面的注释
-/// 然后打开State_SO_Config脚本，取消关于Player_State_SO_Config类的注释即可。
+/// 然后打开Player_State_SO_Config脚本，取消关于Player_State_SO_Config类的注释即可。
 /// 
 /// </summary>
 public class PlayerFSMManager : FSMManager<PlayerStates, PlayerTriggers> 
