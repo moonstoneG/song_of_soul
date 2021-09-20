@@ -12,6 +12,8 @@ public abstract class FSMManager<T1,T2> : MonoBehaviour
     public AudioSource audio;
     public Rigidbody2D rigidbody;
 
+    public Collider2D triggerCollider;
+    public Collision2D collision;
 
     /// /// <summary>
     /// 当前状态
@@ -23,7 +25,6 @@ public abstract class FSMManager<T1,T2> : MonoBehaviour
     /// 任意状态
     /// </summary>
     public FSMBaseState<T1,T2> anyState;
-    [DisplayOnly]
     public T1 defaultStateID;
     /// <summary>
     /// 当前状态机包含的所以状态列表
@@ -109,6 +110,7 @@ public abstract class FSMManager<T1,T2> : MonoBehaviour
     {
         statesDic.Clear();
         InitManager();
+
     }
 
     private void Start()
@@ -119,6 +121,11 @@ public abstract class FSMManager<T1,T2> : MonoBehaviour
         ChangeState(currentStateID);
         if (anyState != null)
             anyState.EnterState(this);
+        foreach (var state in statesDic.Values)
+            foreach (var value in state.triggers)
+            {
+                Debug.LogWarning(this + "  " + state + "  " + value + "  " + value.GetHashCode());
+            }
     }
 
     private void Update()
@@ -154,16 +161,25 @@ public class EnemyFSMManager : FSMManager<EnemyStates, EnemyTriggers>
     {
         if(anyStateConfig!=null)
         {
-            anyState = ObjectClone.CloneObject(anyStateConfig.stateConfig) as FSMBaseState<EnemyStates, EnemyTriggers>;
+            anyState = (FSMBaseState<EnemyStates, EnemyTriggers>)ObjectClone.CloneObject(anyStateConfig.stateConfig);
+            anyState.triggers = new List<FSMBaseTrigger<EnemyStates, EnemyTriggers>>();
+            for (int k=0;k<anyStateConfig.triggerList.Count; k++)
+            {
+                anyState.triggers.Add(ObjectClone.CloneObject(anyStateConfig.triggerList[k]) as FSMBaseTrigger<EnemyStates, EnemyTriggers>);
+                anyState.triggers[anyState.triggers.Count - 1].InitTrigger(this);
+                //Debug.Log(this.gameObject.name+"  "+ anyState.triggers[anyState.triggers.Count - 1]+"  "+anyState.triggers[anyState.triggers.Count - 1].GetHashCode());
+            }
+            anyState.InitState(this);
         }
         for (int i = 0; i < stateConfigs.Count; i++)
         {
             FSMBaseState<EnemyStates, EnemyTriggers> tem = ObjectClone.CloneObject(stateConfigs[i].stateConfig) as FSMBaseState<EnemyStates, EnemyTriggers>;
-            tem.ClearTriggers();
-            foreach (var value in stateConfigs[i].triggerList)
+            tem.triggers = new List<FSMBaseTrigger<EnemyStates, EnemyTriggers>>();
+            for (int k=0;k< stateConfigs[i].triggerList.Count;k++)
             {
-                tem.AddTriggers(value as FSMBaseTrigger<EnemyStates, EnemyTriggers>);
+                tem.triggers.Add(ObjectClone.CloneObject(stateConfigs[i].triggerList[k]) as FSMBaseTrigger<EnemyStates, EnemyTriggers>);
                 tem.triggers[tem.triggers.Count-1].InitTrigger(this);
+                //Debug.Log(this.gameObject.name + "  " + tem.triggers[tem.triggers.Count - 1] + "  " + tem.triggers[tem.triggers.Count - 1].GetHashCode());
             }
             statesDic.Add(stateConfigs[i].stateID, tem);
             tem.InitState(this);
@@ -176,21 +192,30 @@ public class EnemyFSMManager : FSMManager<EnemyStates, EnemyTriggers>
 public class NPCFSMManager : FSMManager<NPCStates, NPCTriggers>
 {
     public List<NPC_State_SO_Config> stateConfigs;
-    public NPC_State_SO_Config anyStateConfig;
+    public Enemy_State_SO_Config anyStateConfig;
     public override void InitWithScriptableObject()
     {
         if (anyStateConfig != null)
         {
-            anyState = ObjectClone.CloneObject(anyStateConfig.stateConfig) as FSMBaseState<NPCStates, NPCTriggers>;
+            anyState = (FSMBaseState<NPCStates, NPCTriggers>)ObjectClone.CloneObject(anyStateConfig.stateConfig);
+            anyState.triggers = new List<FSMBaseTrigger<NPCStates, NPCTriggers>>();
+            for (int k = 0; k < anyStateConfig.triggerList.Count; k++)
+            {
+                anyState.triggers.Add(ObjectClone.CloneObject(anyStateConfig.triggerList[k]) as FSMBaseTrigger<NPCStates, NPCTriggers>);
+                anyState.triggers[anyState.triggers.Count - 1].InitTrigger(this);
+                //Debug.Log(this.gameObject.name+"  "+ anyState.triggers[anyState.triggers.Count - 1]+"  "+anyState.triggers[anyState.triggers.Count - 1].GetHashCode());
+            }
+            anyState.InitState(this);
         }
         for (int i = 0; i < stateConfigs.Count; i++)
         {
             FSMBaseState<NPCStates, NPCTriggers> tem = ObjectClone.CloneObject(stateConfigs[i].stateConfig) as FSMBaseState<NPCStates, NPCTriggers>;
-            tem.ClearTriggers();
-            foreach (var value in stateConfigs[i].triggerList)
+            tem.triggers = new List<FSMBaseTrigger<NPCStates, NPCTriggers>>();
+            for (int k = 0; k < stateConfigs[i].triggerList.Count; k++)
             {
-                tem.AddTriggers(value as FSMBaseTrigger<NPCStates, NPCTriggers>);
+                tem.triggers.Add(ObjectClone.CloneObject(stateConfigs[i].triggerList[k]) as FSMBaseTrigger<NPCStates, NPCTriggers>);
                 tem.triggers[tem.triggers.Count - 1].InitTrigger(this);
+                //Debug.Log(this.gameObject.name + "  " + tem.triggers[tem.triggers.Count - 1] + "  " + tem.triggers[tem.triggers.Count - 1].GetHashCode());
             }
             statesDic.Add(stateConfigs[i].stateID, tem);
             tem.InitState(this);
@@ -212,16 +237,25 @@ public class PlayerFSMManager : FSMManager<PlayerStates, PlayerTriggers>
     //{
     //    if (anyStateConfig != null)
     //    {
-    //        anyState = ObjectClone.CloneObject(anyStateConfig.stateConfig) as FSMBaseState<PlayerStates, PlayerTriggers>;
+    //        anyState = (FSMBaseState<PlayerStates, PlayerTriggers>)ObjectClone.CloneObject(anyStateConfig.stateConfig);
+    //        anyState.triggers = new List<FSMBaseTrigger<PlayerStates, PlayerTriggers>>();
+    //        for (int k = 0; k < anyStateConfig.triggerList.Count; k++)
+    //        {
+    //            anyState.triggers.Add(ObjectClone.CloneObject(anyStateConfig.triggerList[k]) as FSMBaseTrigger<PlayerStates, PlayerTriggers>);
+    //            anyState.triggers[anyState.triggers.Count - 1].InitTrigger(this);
+    //            //Debug.Log(this.gameObject.name+"  "+ anyState.triggers[anyState.triggers.Count - 1]+"  "+anyState.triggers[anyState.triggers.Count - 1].GetHashCode());
+    //        }
+    //        anyState.InitState(this);
     //    }
     //    for (int i = 0; i < stateConfigs.Count; i++)
     //    {
     //        FSMBaseState<PlayerStates, PlayerTriggers> tem = ObjectClone.CloneObject(stateConfigs[i].stateConfig) as FSMBaseState<PlayerStates, PlayerTriggers>;
-    //        tem.ClearTriggers();
-    //        foreach (var value in stateConfigs[i].triggerList)
+    //        tem.triggers = new List<FSMBaseTrigger<PlayerStates, PlayerTriggers>>();
+    //        for (int k = 0; k < stateConfigs[i].triggerList.Count; k++)
     //        {
-    //            tem.AddTriggers(value as FSMBaseTrigger<PlayerStates, PlayerTriggers>);
+    //            tem.triggers.Add(ObjectClone.CloneObject(stateConfigs[i].triggerList[k]) as FSMBaseTrigger<PlayerStates, PlayerTriggers>);
     //            tem.triggers[tem.triggers.Count - 1].InitTrigger(this);
+    //            //Debug.Log(this.gameObject.name + "  " + tem.triggers[tem.triggers.Count - 1] + "  " + tem.triggers[tem.triggers.Count - 1].GetHashCode());
     //        }
     //        statesDic.Add(stateConfigs[i].stateID, tem);
     //        tem.InitState(this);

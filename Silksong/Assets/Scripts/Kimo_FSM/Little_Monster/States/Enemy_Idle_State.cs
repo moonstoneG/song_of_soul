@@ -11,6 +11,7 @@ public class Enemy_Idle_State : EnemyFSMBaseState
     }
     public override void EnterState(FSMManager<EnemyStates, EnemyTriggers> fSM_Manager)
     {
+        fSM_Manager.GetComponent<Animator>().Play("Enemy_Idle");
         fSM_Manager.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
     }
     public override void InitState(FSMManager<EnemyStates, EnemyTriggers> fSM_Manager)

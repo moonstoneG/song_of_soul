@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: Monster00_Patrol
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy_State_SO_Config
+  m_Script: {fileID: 11500000, guid: 0ef5f188f8931fc428a950c26467fb59, type: 3}
+  m_Name: Idle_State
+  m_EditorClassIdentifier: 
   lastStateID: 1
   lastTriggerID: 0
   stateID: 1
@@ -22,33 +22,23 @@ MonoBehaviour:
     id: 1
   triggerList:
   - id: 2
-  - id: 3
   references:
     version: 1
     00000000:
-      type: {class: Enemy_Patrol_State, ns: , asm: Assembly-CSharp}
+      type: {class: Enemy_Idle_State, ns: , asm: Assembly-CSharp}
       data:
         stateID: 1
-        isBack: 1
-        moveSpeed: {x: -4, y: 0, z: 0}
-        rayToGroundDistance: 0.7199998
     00000001:
       type: {class: WaitTimeTrigger, ns: , asm: Assembly-CSharp}
       data:
         triggerID: 0
-        targetState: 0
-        maxTime: 3
+        targetState: 2
+        maxTime: 0.5
         timer: 0
     00000002:
-      type: {class: HitWallTrigger, ns: , asm: Assembly-CSharp}
-      data:
-        triggerID: 1
-        targetState: 1
-        isSigned: 1
-    00000003:
       type: {class: WaitTimeTrigger, ns: , asm: Assembly-CSharp}
       data:
         triggerID: 0
-        targetState: 0
-        maxTime: 3
+        targetState: 2
+        maxTime: 1
         timer: 0

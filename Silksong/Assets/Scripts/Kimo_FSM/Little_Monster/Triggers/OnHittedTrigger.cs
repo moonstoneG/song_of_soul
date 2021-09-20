@@ -12,20 +12,23 @@ public class OnHittedTrigger :EnemyFSMBaseTrigger
     {
         base.InitTrigger(fsm_Manager);
         targetState = EnemyStates.Enemy_Hitted_State;
-        EventsManager.Instance.AddListener(fsm_Manager.gameObject, EventType.onEnemyHitWall, Hitted);
+        EventsManager.Instance.AddListener(fsm_Manager.gameObject, EventType.onTakeDamager, Hitted);
     }
 
     private void Hitted()
     {
         if (!isInvincible)
             isHitted = true;
+        Debug.Log(this.GetHashCode());
+
     }
     public override bool IsTriggerReach(FSMManager<EnemyStates, EnemyTriggers> fsm_Manager)
     {
         if(isHitted)
         {
-            return true;
+            Debug.Log(this.GetHashCode());
             isHitted = false;
+            return true;
         }
         else
         {

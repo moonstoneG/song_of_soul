@@ -21,10 +21,9 @@ public class Enemy_Patrol_State : EnemyFSMBaseState
     public override void EnterState(FSMManager<EnemyStates, EnemyTriggers> fSM_Manager)
     {
         fsmManager = fSM_Manager;
-        
+        fsmManager.animator.Play("Enemy_Patrol");
         if (isBack)
         {
-            Turn();
             var rayHit= Physics2D.Raycast(fsmManager.transform.position + new Vector3((moveSpeed.x > 0 ? 1 : -1), 0, 0) * fsmManager.GetComponent<Collider2D>().bounds.size.x, Vector2.down);
             rayToGroundDistance = rayHit.distance+0.1f;
         }
@@ -41,6 +40,7 @@ public class Enemy_Patrol_State : EnemyFSMBaseState
     }
     private void Turn()
     {
+        
         moveSpeed.x *= -1;
         
     }
@@ -65,7 +65,6 @@ public class Enemy_Patrol_State : EnemyFSMBaseState
         if(rayHit.distance>rayToGroundDistance)
         {
             Turn();
-            Debug.Log(rayHit.distance.ToString() + "  " + rayToGroundDistance.ToString());
         }
     }
 

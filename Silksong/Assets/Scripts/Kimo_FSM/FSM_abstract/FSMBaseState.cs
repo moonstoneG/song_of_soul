@@ -26,7 +26,7 @@ public  class FSMBaseState<T1,T2>
     }
 
     /// <summary>
-    /// 状态初始化，base包含清空TriggerList以供重新加载Trigger。
+    /// 状态初始化
     /// </summary>
     public virtual void InitState(FSMManager<T1,T2> fSMManager) { }
 
@@ -77,6 +77,7 @@ public  class FSMBaseState<T1,T2>
         {
             if (triggers[i].IsTriggerReach(fsm_Manager))
             {
+                Debug.Log(fsmManager+"  "+triggers[i]+" "+ triggers[i].GetHashCode());
                 fsm_Manager.ChangeState(triggers[i].targetState);
             }
         }

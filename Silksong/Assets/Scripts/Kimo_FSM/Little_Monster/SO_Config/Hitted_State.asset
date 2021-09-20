@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: Monster00_Idle
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy_State_SO_Config
-  lastStateID: 0
-  lastTriggerID: 0
-  stateID: 0
+  m_Script: {fileID: 11500000, guid: 0ef5f188f8931fc428a950c26467fb59, type: 3}
+  m_Name: Hitted_State
+  m_EditorClassIdentifier: 
+  lastStateID: 4
+  lastTriggerID: 3
+  stateID: 4
   stateConfig:
     id: 0
-  triggerID: 0
+  triggerID: 3
   triggerConfig:
     id: 1
   triggerList:
@@ -25,20 +25,17 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: Enemy_Idle_State, ns: , asm: Assembly-CSharp}
+      type: {class: Enemy_Hitted_State, ns: , asm: Assembly-CSharp}
       data:
         stateID: 0
+        HittedBackDistance: 5
     00000001:
-      type: {class: WaitTimeTrigger, ns: , asm: Assembly-CSharp}
+      type: {class: AnimationPlayOverTrigger, ns: , asm: Assembly-CSharp}
       data:
         triggerID: 0
-        targetState: 1
-        maxTime: 0.5
-        timer: 0
+        targetState: 0
     00000002:
-      type: {class: WaitTimeTrigger, ns: , asm: Assembly-CSharp}
+      type: {class: AnimationPlayOverTrigger, ns: , asm: Assembly-CSharp}
       data:
-        triggerID: 0
+        triggerID: 3
         targetState: 1
-        maxTime: 0.5
-        timer: 0.39669582

@@ -18,7 +18,9 @@ public enum EnemyTriggers
 {
     WaitTimeTrigger,
     HitWallTrigger,
-    InDetectionAreaTrigger
+    InDetectionAreaTrigger,
+    AnimationPlayOverTrigger,
+    OnHittedTrigger
 }
 
 

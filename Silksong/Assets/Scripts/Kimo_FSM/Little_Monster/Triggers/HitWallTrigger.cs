@@ -19,7 +19,6 @@ public class HitWallTrigger :EnemyFSMBaseTrigger
         if(!isSigned)
         {
             EventsManager.Instance.AddListener(fsm_Manager.gameObject, EventType.onEnemyHitWall, HitTheWall);
-            EventsManager.Instance.AddListener(fsm_Manager.gameObject, EventType.onEnemyHitWall, debug);
             isSigned = true;
         }
 
@@ -30,10 +29,6 @@ public class HitWallTrigger :EnemyFSMBaseTrigger
         }
         else
             return false;
-    }
-    private void debug()
-    {
-        Debug.Log("Hit");
     }
     private void HitTheWall()
     {

@@ -60,7 +60,7 @@ public static class ObjectClone
         }
         return outObj;
     }
-    public static System.Object CloneObject(System.Object obj)
+    public static  System.Object CloneObject(System.Object obj)
     {
         if (obj == null)
             return null;
@@ -80,5 +80,25 @@ public static class ObjectClone
             field.SetValue(outObj, field.GetValue(obj));
         }
         return outObj;
+    }
+    public static void CloneObject(System.Object obj, out System.Object  output)
+    {
+
+        Type type = obj.GetType();
+        output = Activator.CreateInstance(type);
+        PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        foreach (PropertyInfo property in properties)
+        {
+            if (property.CanWrite)
+            {
+                property.SetValue(output, property.GetValue(obj, null), null);
+            }
+        }
+        foreach (FieldInfo field in fields)
+        {
+            field.SetValue(output, field.GetValue(obj));
+        }
+
     }
 }
