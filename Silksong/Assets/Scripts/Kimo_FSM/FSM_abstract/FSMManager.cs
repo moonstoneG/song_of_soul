@@ -117,7 +117,8 @@ public abstract class FSMManager<T1,T2> : MonoBehaviour
 
     private void Start()
     {
-        
+        if (statesDic.Count == 0)
+            return;
         //Ä¬ÈÏ×´Ì¬ÉèÖÃ
         currentStateID = defaultStateID;
         ChangeState(currentStateID);
