@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ef5f188f8931fc428a950c26467fb59, type: 3}
+  m_Name: Pursuit
+  m_EditorClassIdentifier: 
+  lastStateID: 5
+  lastTriggerID: 6
+  stateID: 5
+  stateConfig:
+    id: 0
+  triggerID: 6
+  triggerConfig:
+    id: 1
+  triggerList:
+  - id: 2
+  references:
+    version: 1
+    00000000:
+      type: {class: PursuitState, ns: , asm: Assembly-CSharp}
+      data:
+        stateID: 5
+        steerings:
+        - {fileID: 11400000, guid: 45ecb6e48be1fe24ea5f74ab5506e912, type: 2}
+        - {fileID: 11400000, guid: a4c6a51b249d95e43be9d07d317f2eef, type: 2}
+        target: {fileID: 0}
+    00000001:
+      type: {class: LoseTargetTrigger, ns: , asm: Assembly-CSharp}
+      data:
+        triggerID: 6
+        targetState: 4
+        outRange: 15
+    00000002:
+      type: {class: LoseTargetTrigger, ns: , asm: Assembly-CSharp}
+      data:
+        triggerID: 6
+        targetState: 4
+        outRange: 15

@@ -87,7 +87,15 @@ public  class FSMBaseState<T1,T2>
 
 public class EnemyFSMBaseState : FSMBaseState<EnemyStates,EnemyTriggers> 
 {
-
+    public List<Steering> steerings;
+    public override void Act_State(FSMManager<EnemyStates, EnemyTriggers> fSM_Manager)
+    {
+        base.Act_State(fSM_Manager);
+        foreach(var s in steerings)
+        {
+            s.Force(fsmManager);
+        }
+    }
 }
 public class NPCFSMBaseState: FSMBaseState<NPCStates, NPCTriggers> 
 {
