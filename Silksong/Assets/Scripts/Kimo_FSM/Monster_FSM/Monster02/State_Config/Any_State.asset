@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ef5f188f8931fc428a950c26467fb59, type: 3}
-  m_Name: Pursuit
+  m_Name: Any_State
   m_EditorClassIdentifier: 
-  lastStateID: 5
-  lastTriggerID: 6
-  stateID: 5
+  lastStateID: 0
+  lastTriggerID: 4
+  stateID: 0
   stateConfig:
     id: 0
-  triggerID: 6
+  triggerID: 4
   triggerConfig:
     id: 1
   triggerList:
@@ -25,26 +25,18 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: PursuitState, ns: , asm: Assembly-CSharp}
+      type: {class: Enemy_Any_State, ns: , asm: Assembly-CSharp}
       data:
-        stateID: 5
-        target: {fileID: 0}
-        avoidForce: 2
-        MAX_SEE_AHEAD: 2
-        layer:
-          serializedVersion: 2
-          m_Bits: 64
-        maxSpeed: 3
-        maxForce: 2
+        stateID: 0
     00000001:
-      type: {class: LoseTargetTrigger, ns: , asm: Assembly-CSharp}
+      type: {class: OnHittedTrigger, ns: , asm: Assembly-CSharp}
       data:
-        triggerID: 6
+        triggerID: 4
         targetState: 4
-        outRange: 100
+        isHitted: 0
     00000002:
-      type: {class: LoseTargetTrigger, ns: , asm: Assembly-CSharp}
+      type: {class: OnHittedTrigger, ns: , asm: Assembly-CSharp}
       data:
-        triggerID: 6
+        triggerID: 4
         targetState: 4
-        outRange: 100
+        isHitted: 0

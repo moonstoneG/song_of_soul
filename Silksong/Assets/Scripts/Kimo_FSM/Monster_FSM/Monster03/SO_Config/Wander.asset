@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ef5f188f8931fc428a950c26467fb59, type: 3}
-  m_Name: Wanger
+  m_Name: Wander
   m_EditorClassIdentifier: 
   lastStateID: 4
   lastTriggerID: 5
@@ -28,12 +28,13 @@ MonoBehaviour:
       type: {class: WanderState, ns: , asm: Assembly-CSharp}
       data:
         stateID: 4
-        steerings:
-        - {fileID: 11400000, guid: 68fb57fcb134db046913034be06e6e71, type: 2}
-        - {fileID: 11400000, guid: 45ecb6e48be1fe24ea5f74ab5506e912, type: 2}
-        wanderRadius: 3
+        wanderRange: 3
         wanderCenter: {x: 0, y: 0}
         forceToCenter: 2
+        wanderRadiu: 1
+        wanderJitter: 1
+        maxSpeed: 1
+        targetPos: {x: 1, y: 0}
     00000001:
       type: {class: PursuitTrigger, ns: , asm: Assembly-CSharp}
       data:

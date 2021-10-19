@@ -9,9 +9,14 @@ public enum EnemyStates
     Enemy_Idle_State,
     Enemy_Patrol_State,
     Enemy_Hitted_State,
+//<<<<<<< HEAD
     WanderState,
     PursuitState,
     ClimbState,
+//=======
+    Enemy_Attack_State,
+
+//>>>>>>> 310d8bfdf1778417433501cb8f2772fa073c8446
 }
 
 public enum EnemyTriggers

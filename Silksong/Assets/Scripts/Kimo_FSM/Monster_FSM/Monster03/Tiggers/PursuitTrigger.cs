@@ -14,7 +14,6 @@ public class PursuitTrigger : EnemyFSMBaseTrigger
     }
     public override bool IsTriggerReach(FSMManager<EnemyStates, EnemyTriggers> fsm_Manager)
     {
-        Debug.Log("?");
         Collider2D target = Physics2D.OverlapCircle(fsm_Manager.transform.position, range,layer);
         if (target)
         {
